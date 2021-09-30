@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@ampproject/toolbox-optimizer": "^2.8.3"
+  }
+}
