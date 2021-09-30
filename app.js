@@ -36,10 +36,6 @@ http
       var fileStream = fs.createReadStream(imagePath)
       res.writeHead(200, { 'Content-Type': 'image/webp' })
       fileStream.pipe(res)
-    } else if (req.url === '/favicon.ico') {
-      res.setHeader(200, {'Content-Type': 'image/x-icon'} );
-      fs.createReadStream(path.join(__dirname, 'public', 'favicon.ico')).pipe(res);
-      return
     } else if (req.url.match('.jpg$')) {
       var imagePath = path.join(__dirname, 'public', req.url)
       var fileStream = fs.createReadStream(imagePath)
