@@ -11,7 +11,7 @@ http
         res.setHeader('Content-Type', 'text/html')
         res.setHeader('X-Foo', 'bar')
         res.writeHead(200, { 'Content-Type': 'text/plain' })
-        res.end('ok')
+        res.end(html)
       })
     } else if (req.url.match('.txt$')) {
       let cssPath = path.join(__dirname, 'public', req.url)
