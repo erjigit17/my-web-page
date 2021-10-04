@@ -10,7 +10,7 @@ http
       fs.readFile('./public/index.html', 'UTF-8', function (err, html) {
         res.setHeader('Content-Type', 'text/html')
         res.setHeader('X-Foo', 'bar')
-        res.writeHead(200, { 'Content-Type': 'text/plain' })
+        res.writeHead(200, { 'Content-Type': 'text/html' })
         res.end(html)
       })
     } else if (req.url.match('.txt$')) {
