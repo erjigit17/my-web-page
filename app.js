@@ -8,37 +8,39 @@ http
   .createServer(function (req, res) {
     if (req.url === '/') {
       fs.readFile('./public/index.html', 'UTF-8', function (err, html) {
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=UTF-8' })
-        res.end(html)
+        res.setHeader('Content-Type', 'text/html')
+        res.setHeader('X-Foo', 'bar')
+        res.writeHead(200, { 'Content-Type': 'text/plain' })
+        res.end('ok')
       })
     } else if (req.url.match('.txt$')) {
-      var cssPath = path.join(__dirname, 'public', req.url)
-      var fileStream = fs.createReadStream(cssPath, 'UTF-8')
+      let cssPath = path.join(__dirname, 'public', req.url)
+      let fileStream = fs.createReadStream(cssPath, 'UTF-8')
       res.writeHead(200, { 'Content-Type': 'text/plain' })
       fileStream.pipe(res)
     } else if (req.url.match('.css$')) {
-      var cssPath = path.join(__dirname, 'public', req.url)
-      var fileStream = fs.createReadStream(cssPath, 'UTF-8')
+      let cssPath = path.join(__dirname, 'public', req.url)
+      let fileStream = fs.createReadStream(cssPath, 'UTF-8')
       res.writeHead(200, { 'Content-Type': 'text/css' })
       fileStream.pipe(res)
     } else if (req.url.match('.avif$')) {
-      var imagePath = path.join(__dirname, 'public', req.url)
-      var fileStream = fs.createReadStream(imagePath)
+      let imagePath = path.join(__dirname, 'public', req.url)
+      let fileStream = fs.createReadStream(imagePath)
       res.writeHead(200, { 'Content-Type': 'image/avif' })
       fileStream.pipe(res)
     } else if (req.url.match('.js$')) {
-      var imagePath = path.join(__dirname, 'public', req.url)
-      var fileStream = fs.createReadStream(imagePath)
+      let imagePath = path.join(__dirname, 'public', req.url)
+      let fileStream = fs.createReadStream(imagePath)
       res.writeHead(200, { 'Content-Type': 'text/javascript' })
       fileStream.pipe(res)
     } else if (req.url.match('.webp$')) {
-      var imagePath = path.join(__dirname, 'public', req.url)
-      var fileStream = fs.createReadStream(imagePath)
+      let imagePath = path.join(__dirname, 'public', req.url)
+      let fileStream = fs.createReadStream(imagePath)
       res.writeHead(200, { 'Content-Type': 'image/webp' })
       fileStream.pipe(res)
     } else if (req.url.match('.jpg$')) {
-      var imagePath = path.join(__dirname, 'public', req.url)
-      var fileStream = fs.createReadStream(imagePath)
+      let imagePath = path.join(__dirname, 'public', req.url)
+      let fileStream = fs.createReadStream(imagePath)
       res.writeHead(200, { 'Content-Type': 'image/jpg' })
       fileStream.pipe(res)
     } else {
