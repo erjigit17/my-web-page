@@ -7,10 +7,8 @@ const port = process.env.PORT || 5000
 http
   .createServer(function (req, res) {
     if (req.url === '/') {
-      fs.readFile('./public/index.html', 'UTF-8', function (err, html) {
-        res.setHeader('Content-Type', 'text/html')
-        res.setHeader('X-Foo', 'bar')
-        res.writeHead(200, { 'Content-Type': 'text/html' })
+      fs.readFile('./public/index.html', 'UTF-8', (err, html) => {
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=UTF-8' })
         res.end(html)
       })
     } else if (req.url.match('.txt$')) {
