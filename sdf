@@ -1,0 +1,12 @@
+location /v0.mjs {
+    resolver 8.8.8.8 8.8.4.4;
+    proxy_ssl_verify off; proxy_ssl_server_name on;
+    proxy_pass https://cdn.ampproject.org:443/v0.mjs;
+    proxy_set_header Host 'cdn.ampproject.org';
+
+    proxy_cache nodeCache;
+    proxy_cache_min_uses 1;
+    proxy_cache_valid 200 302 5m;
+    proxy_cache_valid 404 1m;
+    add_header X-Proxy-Cache $upstream_cache_status;
+}
