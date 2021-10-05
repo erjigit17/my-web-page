@@ -1,0 +1,58 @@
+proxy_cache_path /tmp/cache keys_zone=nodeCache:10m levels=1:2 inactive=10m max_size=100m;
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    #       root /var/www/html;
+    #       index index.html index.htm index.nginx-debian.html;
+    server_name erjigit.link;
+
+    location /v0.mjs { #resolver from 3th server
+        resolver 8.8.8.8 8.8.4.4;
+        proxy_ssl_verify off; proxy_ssl_server_name on;
+        proxy_pass https://cdn.ampproject.org:443/v0.mjs;
+        proxy_set_header Host 'cdn.ampproject.org';
+
+        expires 30d; #forse cache
+        add_header Pragma public;
+        add_header Cache-Control "public";
+        proxy_ignore_headers "Cache-Control";
+        proxy_ignore_headers Vary;
+        proxy_ignore_headers Expires;
+        proxy_ignore_headers Set-Cookie;
+        proxy_cache nodeCache;
+
+
+        proxy_cache_min_uses 1;
+        proxy_cache_valid 200 302 5m;
+        proxy_cache_valid 404 1m;
+        add_header X-Proxy-Cache $upstream_cache_status;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        ### cache
+        proxy_cache nodeCache;
+        proxy_cache_min_uses 1;
+        proxy_cache_valid 200 302 5m;
+        proxy_cache_valid 404 1m;
+        add_header X-Proxy-Cache $upstream_cache_status;
+        ### cache
+        proxy_cache_bypass $http_upgrade;
+
+        http2_push /v0.mjs;
+        http2_push /robots.txt;
+    }
+
+    listen [::]:443 ssl http2;
+    listen 443 ssl http2;
+    ssl_certificate /etc/letsencrypt/live/erjigit.link/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/erjigit.link/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
